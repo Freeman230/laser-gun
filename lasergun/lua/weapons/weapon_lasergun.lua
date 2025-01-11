@@ -1,7 +1,7 @@
 SWEP.Author = "1999"
 SWEP.Category = "1999's Weapons (Admin)"
 SWEP.PrintName = "Laser Gun"
-SWEP.Instructions = "Inspired by peacekeeper's (pk25) ability to shoot lasers"
+SWEP.Instructions = ""
 
 SWEP.ViewModelFOV		= 54
 SWEP.ViewModel			= "models/weapons/c_pistol.mdl"
