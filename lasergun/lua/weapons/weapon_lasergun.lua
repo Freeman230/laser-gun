@@ -1,7 +1,6 @@
 SWEP.Author = "1999"
 SWEP.Category = "1999's Weapons (Admin)"
 SWEP.PrintName = "Laser Gun"
-SWEP.Instructions = ""
 
 SWEP.ViewModelFOV		= 54
 SWEP.ViewModel			= "models/weapons/c_pistol.mdl"
@@ -30,12 +29,12 @@ SWEP.AutoSwitchTo = true
 SWEP.AutoSwitchFrom = true
 
 function SWEP:FireAnimationEvent(pos,ang,event,options)
-return true
+    return true
 end
 
 function SWEP:Initialize()
-self:SetWeaponHoldType("pistol")
-util.PrecacheSound(self.Primary.Sound) 
+    self:SetWeaponHoldType("pistol")
+    util.PrecacheSound(self.Primary.Sound) 
 end
 
 function SWEP:PrimaryAttack()
@@ -48,20 +47,23 @@ self.Weapon:EmitSound(Sound(self.Primary.Sound))
 local bullet = {}
 
 bullet.Callback = function(a, tr, d)
+  
 if SERVER and tr.Entity:IsPlayer() then
-tr.Entity:Kill()
+    tr.Entity:Kill()
 end
+  
 if tr.Entity:IsNPC() or tr.Entity:IsNextBot() then
-d:SetDamageForce(self.Owner:GetAimVector()*2147483647)
+    d:SetDamageForce(self.Owner:GetAimVector()*2147483647)
 end
+  
 if tr.Entity:GetClass()=="npc_helicopter" or tr.Entity:GetClass()=="npc_turret_floor" or tr.Entity:GetClass()=="npc_combinedropship" or tr.Entity:GetClass()=="npc_combinegunship" or tr.Entity:GetClass()=="npc_strider" or tr.Entity:GetClass()=="npc_cscanner" or tr.Entity:GetClass()=="npc_clawscanner" or tr.Entity:GetClass()=="npc_manhack" or tr.Entity:GetClass()=="npc_combine_camera" or tr.Entity:GetClass()=="npc_turret_ceiling" or tr.Entity:GetClass()=="npc_barnacle" or tr.Entity:GetClass()=="monster_barnacle" or tr.Entity:GetClass()=="npc_security_camera" then
-tr.Entity:Fire("Kill")
+    tr.Entity:Fire("Kill")
 end
-d:SetAttacker(self.Owner)
-d:SetInflictor(self.Owner)
-d:SetDamage(2147483647)
-d:SetDamageType(bit.bor(DMG_AIRBOAT,DMG_BLAST))
-tr.Entity:TakeDamageInfo(d)
+    d:SetAttacker(self.Owner)
+    d:SetInflictor(self.Owner)
+    d:SetDamage(2147483647)
+    d:SetDamageType(bit.bor(DMG_AIRBOAT,DMG_BLAST))
+    tr.Entity:TakeDamageInfo(d)
 end
 
 bullet.Num = 1
@@ -76,5 +78,5 @@ self:FireBullets(bullet)
 end
 
 function SWEP:SecondaryAttack()
-self:PrimaryAttack()
+    self:PrimaryAttack()
 end
