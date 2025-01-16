@@ -38,7 +38,8 @@ local function grm(ent)
 end
 
 local function CreateEntityRagdoll(ent, ply, skin, force)
-    if !IsValid(ent) or IsValid(ent.CorpseRag) then return end
+
+    if ( not !IsValid(ent) ) then return end
     
 	local model = grm(ent)
 	local clr = Color(ent:GetColor().r, ent:GetColor().g, ent:GetColor().b)
@@ -93,7 +94,7 @@ local laser = {}
 
 laser.Callback = function(a, tr, d)
   
-if SERVER and tr.Entity:IsPlayer() then
+if SERVER and (tr.Entity:IsPlayer() and tr.Entity:HasGodMode()) then
     tr.Entity:Kill()
 end
   
@@ -125,7 +126,6 @@ end
 					
 					e:TakeDamageInfo(dmginfo)
 			        e:SetHealth(0)
-					e:Fire("Kill")
 					e:NextThink(CurTime() + 5 )
 					CreateEntityRagdoll(ent, ply, skin, force)
 					
@@ -133,34 +133,25 @@ end
 					        e:EmitSound("weapons/fx/rics/ric1.wav")
 					    end
 					
-					e.AcceptInput = function() return false end
-                    e.AddRelationship = function(self,...) self:Remove() return end
-                    e.AddeityRelationship = function(self,...) self:Remove() end
-                    e.BehaeeStart = function(self,...) return self:Remove() end
-                    e.BehaeeUpdate = function(self,...) return self:Remove() end
-                    e.BodyUpdate = function(self,...) return self:Remove() end
-                    e.GetTarget = function(self,...) return self:Remove() end
-                    e.GetShootPos = function(self,...) return self:Remove() end
-                    e.OnRemove = function(self,...) return self:Remove() end
-                    e.OnRemove = function(self,...) return self:Remove() end
-                    e.OnIgnite = function(self,...) return self:Remove() end
-                    e.OnDeath = function(self,...) return self:Remove() end
-                    e.OnTakeDamage = function(self,...) return self:Remove() end
-                    e.RunBehaeiour = function(self,...) return self:Remove() end
-                    e.Initialize = function(self,...) return self:Remove() end
-                    e.OnStuck = function(self,...) return self:Remove() end
-                    e.UnstickFromCeiling = function(self,...) return self:Remove() end
-                    e.OnReloaded = function(self,...) return self:Remove() end
-                    e.OnDead = function(self,...) return self:Remove() end
-                    e.RecomputeTargetPath = function(self,...) return self:Remove() end
-                    e.GetNearestUsableHidingSpot = function(self,...) return self:Remove() end
-                    e.Think = function(self,...) return self:Remove() end
-                    e.CustomThink = function(self,...) return self:Remove() end
+					e.AcceptInput = function() return false end                    
+			        e.OnRemove = function(e,...) e:Remove() end
+					e.OnDeath = function(e,...) e:Remove() end
+					e.OnTakeDamage = function(e,...) e:Remove() end
+			        e.CustomThink = function(e,...) e:Remove() return end
+			        e.Think = function(e,...) e:Remove() return end
 					
-				    end
-	           end
-	      end
-	 end	
+					if e and !IsValid(e) then
+					   e:Fire("Kill", "", 0.01)		
+                    end	
+
+                    if e:GetClass()=="npc_combinedropship" or e:GetClass()=="npc_combinegunship" then -- These two don't get killed properly so we remove them
+					    e:Remove()
+                    end	
+							 					
+		       end
+	         end
+            end
+      end
 end
 
     laser.Num = 1
@@ -177,4 +168,8 @@ end
 
 function SWEP:SecondaryAttack()
     self:PrimaryAttack()
+end
+
+function SWEP:GetNPCBulletSpread(p)
+	return 0
 end
