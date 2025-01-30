@@ -124,7 +124,7 @@ end
  	
       					 e:SetHealth(0)
       					 e:Dissolve(math.random(0,3))
-               		             e:Ignite(5)	
+               		                 e:Ignite(5)	
       					 e:SetVelocity(self.Owner:GetAimVector()*10000)
       					 
      					if e:GetClass()=="prop_ragdoll" then
